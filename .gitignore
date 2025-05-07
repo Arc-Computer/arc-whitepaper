@@ -9,3 +9,7 @@ main.blg
 main.log
 main.out
 main.toc
+.chktexrc
+.DS_Store
+main.tex
+glossary.tex
