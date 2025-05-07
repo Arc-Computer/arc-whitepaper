@@ -1,0 +1,23 @@
+\section*{Glossary}
+
+\begin{description}
+\item[Temporal Knowledge Graph (TKG)] A dynamic graph structure that captures the evolution of code, design decisions, requirements, agent actions, and their causal interdependencies over time. Unlike static code graphs, TKGs represent facts as quadruples $(h,r,t,\tau)$ with timestamps or intervals $\tau$.
+
+\item[Causal CRDT] An extension of Conflict-free Replicated Data Types (CRDTs) that enforces semantic invariants derived from the TKG during concurrent operations. These invariants preserve crucial dependencies like build order and API contracts, preventing logical conflicts while allowing parallel edits.
+
+\item[Provenance-Driven Reinforcement Learning] A learning approach where agents are rewarded for generating and consuming causal context within the TKG—linking changes to requirements, documenting decisions, and unblocking other agents—fostering truly collaborative and auditable AI systems.
+
+\item[SYNAPSE Benchmark] A real-world benchmark for evaluating multi-agent engineering systems, where two AI agents must upgrade OpenSSL across a microservice monorepo while maintaining build integrity and test coverage.
+
+\item[Vector Clock] A data structure used in distributed systems to establish a partial ordering of events. In Arc, vector clocks help track causal relationships between operations performed by different agents.
+
+\item[Architectural Decision Records (ADRs)] Structured documents that capture important architectural decisions made during the development process, including context, consequences, and alternatives considered.
+
+\item[Context Collapse] The phenomenon where critical "why" context is scattered across different tools and systems, making it difficult to understand the rationale behind code changes, especially as AI accelerates code generation.
+
+\item[Provenance Gap] The challenge of tracking the origin, requirements, and verification status of AI-generated code, which becomes increasingly important as AI generates more code with less human oversight.
+
+\item[Coordination Chaos] The problem that arises when multiple AI agents (and humans) work on the same codebase without a common world model, introducing conflicts and inconsistencies.
+
+\item[World Model] A comprehensive representation of a system that captures not just its current state but also the causal relationships and dynamics that govern how it evolves over time.
+\end{description}
