@@ -1,95 +1,47 @@
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \begin{tikzpicture}[
-    node distance=1.5cm and 2cm,
-    box/.style={draw, minimum width=2.5cm, minimum height=1cm, align=center, rounded corners=2pt},
-    agent/.style={box, fill=orange!20},
-    operation/.style={box, fill=blue!10},
-    decision/.style={diamond, draw, fill=yellow!20, text width=2.5cm, align=center, inner sep=0pt},
-    buffer/.style={box, fill=orange!10},
-    final/.style={box, fill=green!20},
-    arrow/.style={->, >=stealth, thick},
-    note/.style={font=\footnotesize, align=center, text width=3cm}
+    scale=0.9,
+    box/.style={draw, minimum width=3cm, minimum height=1.2cm, align=center, rounded corners=5pt, thick},
+    agent/.style={box, fill=blue!10},
+    file/.style={box, fill=gray!10},
+    problem/.style={draw, fill=red!10, text width=3.5cm, align=center, rounded corners=5pt, thick},
+    solution/.style={draw, fill=green!10, text width=3.5cm, align=center, rounded corners=5pt, thick},
+    arrow/.style={->, >=stealth, thick, shorten >=2pt, shorten <=2pt},
+    dashedarrow/.style={->, >=stealth, thick, dashed, shorten >=2pt, shorten <=2pt}
   ]
-  
-  % Dependency explanation
-  \node[draw, fill=yellow!10, minimum width=8cm, minimum height=2cm, rounded corners] (dep_box) at (0,6) {};
-  \node[align=center] at (0,6.5) {\textbf{Causal Dependency Example}};
-  \node[align=left, text width=7cm] at (0,5.8) {
-    \textbf{Explicit Dependency:} \textit{dep\_B} (tests) \\
-    $\mapsto$ \textit{op\_A}
-  };
-  \node[align=left, text width=7cm] at (0,5) {
-    \textbf{Vector Clock:} Causality-tracking: \textit{A} $\prec$ \\
-    \textit{vclock\_B}
-  };
-  
-  % Agents
-  \node[agent] (agent1) at (-4,3) {Agent 1};
-  \node[agent] (agent2) at (4,3) {Agent 2};
-  
-  % Operations
-  \node[operation, below=of agent1] (op1) {Local Operation\\Processing (§3.2.1)};
-  \node[operation, below=of agent2] (op2) {Remote Operation\\Processing (§3.2.2)};
-  
-  % Operation notes
-  \node[note, left=0.5cm of op1] {Op\_A creates new Extract\\Method};
-  \node[note, right=0.5cm of op2] {Op\_B: Update Tests for\\foo() (dep: foo\_A)};
-  
-  % Operation record
-  \node[operation, below=of op1] (op_record) {Operation Record (id,\\op\_data, vc, deps)};
-  
-  % Apply to TKG
-  \node[operation, below=of op_record] (apply_tkg) {Apply to Local TKG};
-  
-  % Propagate
-  \node[operation, below=of apply_tkg] (propagate) {Propagate to Other\\Replicas};
-  
-  % Decision diamonds
-  \node[decision, below=of op2] (delivered) {Already\\Delivered?};
-  \node[decision, below=2cm of delivered] (deps_met) {Dependencies\\Met?};
-  
-  % Buffer and apply operations
-  \node[buffer, below right=1.5cm of deps_met] (buffer_op) {Buffer Operation Until\\Dependencies Are Met};
-  \node[operation, below left=1.5cm of deps_met] (apply_op) {Apply Operation Causally\\to TKG};
-  
-  % Update vector clock
-  \node[operation, below=of apply_op] (update_vc) {Update Local Vector Clock};
-  
-  % Process buffer
-  \node[operation, below=of update_vc] (process_buffer) {Process Buffer};
-  
-  % Final decision
-  \node[decision, below=of process_buffer] (ops_enabled) {Any Ops Now\\Enabled?};
-  
-  % Final states
-  \node[buffer, below right=1.5cm of ops_enabled] (apply_enabled) {Apply Enabled Buffered\\Operations};
-  \node[final, below left=1.5cm of ops_enabled] (consistent) {Consistent TKG State\\(Strong Eventual\\Consistency with Causal\\Dependencies)};
-  
-  % Connections
-  \draw[arrow] (op1) -- (op_record);
-  \draw[arrow] (op_record) -- (apply_tkg);
-  \draw[arrow] (apply_tkg) -- (propagate);
-  
-  \draw[arrow] (op2) -- (delivered);
-  \draw[arrow] (delivered) -- node[right] {Yes} (deps_met);
-  \draw[arrow] (delivered) -| node[above] {No} ++(3,0) |- (apply_op);
-  
-  \draw[arrow] (deps_met) -- node[left] {Yes} (apply_op);
-  \draw[arrow] (deps_met) -- node[right] {No} (buffer_op);
-  
-  \draw[arrow] (apply_op) -- (update_vc);
-  \draw[arrow] (update_vc) -- (process_buffer);
-  \draw[arrow] (process_buffer) -- (ops_enabled);
-  
-  \draw[arrow] (ops_enabled) -- node[left] {No} (consistent);
-  \draw[arrow] (ops_enabled) -- node[right] {Yes} (apply_enabled);
-  \draw[arrow] (apply_enabled) |- ++(0,-1) -| (process_buffer);
-  
-  % Notes
-  \node[note, right=0.5cm of deps_met] {Op\_B depends on Op\_A\\and won't apply until Op\_A\\is processed};
-  
+
+  % Problem side (left) - increased horizontal spacing
+  \node[draw=none, font=\large\bfseries] at (-5,3.5) {Problem: Conflicts};
+
+  \node[agent] (agent_a1) at (-7,2) {Agent A};
+  \node[agent] (agent_b1) at (-3,2) {Agent B};
+
+  \node[file] (file1) at (-5,0) {file.py};
+
+  \draw[arrow] (agent_a1) -- node[left] {Edit} (file1);
+  \draw[arrow] (agent_b1) -- node[right] {Edit} (file1);
+
+  \node[problem] (conflict) at (-5,-2) {Conflict!\\Both agents modify\\the same file\\without coordination};
+  \draw[arrow, red, thick] (file1) -- (conflict);
+
+  % Solution side (right) - increased horizontal spacing
+  \node[draw=none, font=\large\bfseries] at (5,3.5) {Solution: Causal Dependencies};
+
+  \node[agent] (agent_a2) at (3,2) {Agent A};
+  \node[agent] (agent_b2) at (7,2) {Agent B};
+
+  \node[file] (file2) at (5,0) {file.py};
+
+  \draw[arrow] (agent_a2) -- node[left, align=center, text width=1.8cm] {1. Define\\function} (file2);
+  \draw[arrow] (agent_b2) -- node[right, align=center, text width=1.8cm] {2. Call\\function} (file2);
+
+  \draw[dashedarrow, bend left=40] (agent_b2) to node[above] {Waits for} (agent_a2);
+
+  \node[solution] (solution) at (5,-2) {Safe coordination!\\Agent B's edit depends\\on Agent A's function\\being defined first};
+  \draw[arrow, green!50!black, thick] (file2) -- (solution);
+
   \end{tikzpicture}
-  \caption{Causal Dependency Management in Arc: The system tracks explicit dependencies between operations and uses vector clocks to ensure causal consistency. When Agent 2 creates an operation that depends on Agent 1's prior work, the system buffers the operation until all dependencies are met, ensuring semantic correctness while allowing maximum parallelism.}
+  \caption{Causal Dependency Management: On the left, we see the problem when multiple agents edit the same file without coordination, leading to conflicts. On the right, Arc's solution uses causal dependencies to ensure that operations happen in the correct order - Agent B waits for Agent A to define a function before trying to call it.}
   \label{fig:causal_dependency}
 \end{figure}

@@ -5,6 +5,7 @@
 \setlist[enumerate]{topsep=2pt, parsep=2pt, itemsep=2pt}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{textcomp}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -20,7 +21,6 @@
 \usepackage{setspace}
 \usepackage{tcolorbox}
 \usepackage[left=1.25in,right=1in,top=1in,bottom=1in]{geometry}
-\usepackage{qrcode}
 
 \titleformat{\section}{\large\bfseries\color{arcblue}}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries\color{arcblue}}{\thesubsection}{1em}{}
@@ -88,21 +88,6 @@ This paper details the Arc architecture, discusses related work, outlines the SY
 Arc transforms every codebase into a continuously-evolving world model—a live, executable graph of architecture, rationale, and provenance that both humans and AI agents can query, update, and learn from.
 \end{keypoint}
 
-\input{figures/causal_dependency}
-\begin{center}
-\textit{Figure: Causal Dependency Management in Arc - Ensuring semantic correctness during parallel development}
-\end{center}
-
-\input{figures/rl_flow}
-\begin{center}
-\textit{Figure: Reinforcement Learning Flow in Arc - Training agents to collaborate effectively}
-\end{center}
-
-\input{arc_roadmap}
-\begin{center}
-\textit{Figure: Arc Development Roadmap - From initial launch to multi-agent coordination}
-\end{center}
-
 \section{Arc at a Glance}
 Arc provides a shared, persistent, and semantically consistent foundation for collaborative AI software development. It integrates three core components, previously introduced, which work in concert to create an active world model of the software project:
 \begin{itemize}
@@ -116,6 +101,18 @@ The illustrative example of upgrading OpenSSL across services highlights Arc's p
 \begin{center}
 \textit{Figure: Arc Architecture - Integrating Temporal Knowledge Graphs, Causal CRDTs, and Provenance-Driven RL}
 \end{center}
+
+\input{figures/causal_dependency}
+\begin{center}
+\textit{Figure: Causal Dependency Management in Arc - Ensuring semantic correctness during parallel development}
+\end{center}
+
+\input{figures/rl_flow}
+\begin{center}
+\textit{Figure: Reinforcement Learning Flow in Arc - Training agents to collaborate effectively}
+\end{center}
+
+% Arc roadmap figure removed as requested - TBD
 
 \section{Problem Statement \& Research Gap}
 The challenge is enabling multiple AI agents to collaboratively remember, reason about, and evolve software systems while maintaining architectural integrity and decision provenance.
@@ -156,7 +153,7 @@ RL has been applied to various software engineering tasks, including code genera
 \end{itemize}
 
 \section{Proposed Approach: High-Level Architecture}
-As illustrated in Figure \ref{fig:arc_architecture} above, Arc integrates three key components that work together to create a cohesive memory layer for software engineering.
+As illustrated in Figure \ref{fig:arc_architecture}, Arc integrates three key components that work together to create a cohesive memory layer for software engineering.
 
 \subsection{Temporal Knowledge Graph (TKG) as Environment}
 The TKG serves as the shared world model and RL environment. \textit{Think of it as the project's collective, structured memory or logbook, capturing not just the code but the relationships between components, changes, and decisions over time.}
@@ -180,7 +177,7 @@ We propose an operation-based Causal CRDT to manage concurrent writes while pres
 \begin{itemize}
   \item \textbf{Design:} Each operation has dependency metadata (`deps`) and a vector clock. Merges happen when all dependencies and causal predecessors are satisfied \cite{ref5,ref14,ref15,ref24}, otherwise they are buffered.
       \begin{itemize}
-          \item \textit{Example Operation (Agent B):} \verb|Op:UpdateAPISignature(PaymentAPI)| (ensuring Agent A's foundational refactor is committed before the API depending on it is changed). Merges (applying operations to the shared state) occur only when all vector clock predecessors \textit{and} explicit TKG-derived dependencies are satisfied \cite{ref9, ref20, ref21, ref22}. Operations with unmet dependencies are buffered (See Figure \ref{fig:causal_dependency} above).
+          \item \textit{Example Operation (Agent B):} \verb|Op:UpdateAPISignature(PaymentAPI)| (ensuring Agent A's foundational refactor is committed before the API depending on it is changed). Merges (applying operations to the shared state) occur only when all vector clock predecessors \textit{and} explicit TKG-derived dependencies are satisfied \cite{ref9, ref20, ref21, ref22}. Operations with unmet dependencies are buffered (See Figure \ref{fig:causal_dependency}).
       \end{itemize}
 
   \item \textbf{Differentiation:} Its novelty is in enforcing deterministic, application-specific causal invariants critical for software evolution (e.g., "a service cannot deploy if dependent libraries fail tests," "an API change requires updating all callers"). Unlike structural CRDTs or probabilistic approaches, Arc leverages the live TKG state during the merge protocol to define and check semantic invariants via metadata, ensuring correctness beyond eventual consistency.
@@ -188,7 +185,7 @@ While fine-grained Abstract Syntax Tree (AST) level CRDTs pose additional challe
 \end{itemize}
 
 \subsection{Step-Wise Reinforcement Learning (RL) Loop}
-Agents learn optimal policies for evolving codebases within the TKG environment using offline RL from interaction traces \cite{ref12, ref19}. \textit{The goal isn't just to teach agents to write code, but to teach them how to be effective members of a collaborative team, using the shared memory to coordinate and understand context.} Each trace step contains the state, action, reward, next state, and causal dependencies: (s,a,r,s$'$,deps). As illustrated in Figure \ref{fig:rl_flow} above, this process creates a learning flywheel.
+Agents learn optimal policies for evolving codebases within the TKG environment using offline RL from interaction traces \cite{ref12, ref19}. \textit{The goal isn't just to teach agents to write code, but to teach them how to be effective members of a collaborative team, using the shared memory to coordinate and understand context.} Each trace step contains the state, action, reward, next state, and causal dependencies: (s,a,r,s$'$,deps). As illustrated in Figure \ref{fig:rl_flow}, this process creates a learning flywheel.
 
 \begin{itemize}
      \item \textbf{Multi-Component Reward:} The reward function $R$ guides agents to become effective collaborators by considering multiple factors beyond task completion.
@@ -325,11 +322,6 @@ We thank the research community for valuable discussions that have shaped this p
 
 \vspace{0.5cm}
 \begin{center}
-\rule{0.5\textwidth}{0.5pt}
-\vspace{0.5cm}
-
-\qrcode[height=1.5in]{https://arc.computer}
-\\ \vspace{0.3cm}
 \textit{Learn more about Arc at \href{https://arc.computer}{arc.computer}}
 \end{center}
 \end{document}

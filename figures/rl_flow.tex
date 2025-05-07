@@ -1,72 +1,51 @@
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
+  \resizebox{\textwidth}{!}{
   \begin{tikzpicture}[
-    node distance=1.5cm and 2cm,
-    box/.style={draw, minimum width=2.5cm, minimum height=1cm, align=center, rounded corners=2pt},
-    state/.style={box, fill=green!20},
+    scale=0.9,
+    box/.style={draw, minimum width=2.8cm, minimum height=1.2cm, align=center, rounded corners=5pt, thick},
     agent/.style={box, fill=orange!20},
-    action/.style={box, fill=purple!15},
     tkg/.style={box, fill=blue!10},
+    action/.style={box, fill=purple!15},
     reward/.style={box, fill=yellow!20},
-    data/.style={box, fill=blue!5},
-    rl/.style={box, fill=purple!5},
-    arrow/.style={->, >=stealth, thick},
-    note/.style={font=\footnotesize, align=center}
+    buffer/.style={box, fill=green!10},
+    arrow/.style={->, >=stealth, thick, shorten >=4pt, shorten <=4pt},
+    dashedarrow/.style={->, >=stealth, thick, dashed, shorten >=4pt, shorten <=4pt}
   ]
-  
-  % Main components
-  \node[state] (tkg_state) {TKG State s};
-  \node[agent, right=of tkg_state] (policy) {Agent Policy $\pi$(s|a)};
-  \node[action, below right=of policy] (action) {Action a (TKG Op + Tool\\Use + Reasoning +\\Dependencies)};
-  \node[box, below right=of action] (transition) {Environment Transition\\(s → s')};
-  \node[tkg, below left=of transition] (tkg) {Temporal Knowledge\\Graph};
-  \node[reward, below=of transition] (reward) {Multi-faceted Reward\\Function R(s,a,s')};
-  
-  % Reward components
-  \node[box, below=0.3cm of reward, text width=2cm, align=center] (r_corr) {$R_{corr}$ (Correctness)};
-  \node[box, below=0.3cm of r_corr, text width=2cm, align=center] (r_comp) {$R_{comp}$ (Completeness)};
-  \node[box, below=0.3cm of r_comp, text width=2cm, align=center] (r_reas) {$R_{reas}$ (Reasoning)};
-  \node[box, below=0.3cm of r_reas, text width=2cm, align=center] (r_tool) {$R_{tool}$ (Tool Use)};
-  \node[box, below=0.3cm of r_tool, text width=2cm, align=center] (r_kg) {$R_{kg}$ (KG Quality)};
-  \node[box, below=0.3cm of r_kg, text width=2cm, align=center] (r_causal) {$R_{causal}$ (Dependencies)};
-  \node[box, below=0.3cm of r_causal, text width=2cm, align=center] (r_hook) {$R_{hook\_penalty}$};
-  
-  % Reward formula
-  \node[box, right=of r_reas, text width=3.5cm, align=left, draw=none] (formula) {
-    $R = w_{corr}R_{corr} +$\\
-    $w_{comp}R_{comp} +$\\
-    $w_{reas}R_{reas} +$\\
-    $w_{tool}R_{tool} +$\\
-    $w_{kg}R_{kg} +$\\
-    $w_{causal}R_{causal} +$\\
-    $R_{hook\_penalty}$
+
+  % Main components in a circular flow with increased spacing
+  \node[agent] (agent) at (0,3.5) {AI Agent};
+  \node[action] (action) at (5,1.5) {Action};
+  \node[tkg] (tkg) at (5,-1.5) {Temporal Knowledge\\Graph};
+  \node[reward] (reward) at (0,-3.5) {Reward Function};
+  \node[buffer] (buffer) at (-5,-1.5) {Experience Buffer};
+  \node[box, fill=purple!10] (rl) at (-5,1.5) {RL Update};
+
+  % Simple circular flow with shorter labels and increased spacing
+  \draw[arrow] (agent) -- node[above right, xshift=5pt, yshift=5pt] {Takes} (action);
+  \draw[arrow] (action) -- node[right, xshift=5pt] {Updates} (tkg);
+  \draw[arrow] (tkg) -- node[below right, xshift=5pt, yshift=-5pt] {Evaluated by} (reward);
+  \draw[arrow] (reward) -- node[below left, xshift=-5pt, yshift=-5pt] {Stored in} (buffer);
+  \draw[arrow] (buffer) -- node[left, xshift=-5pt] {Used for} (rl);
+  \draw[arrow] (rl) -- node[above left, xshift=-5pt, yshift=5pt] {Improves} (agent);
+
+  % Reward components with increased spacing
+  \node[align=center, text width=5cm, font=\small, draw, fill=yellow!10, rounded corners] at (0,-5.5) {
+    \textbf{Reward Components:}\\
+    Correctness + Completeness\\
+    Reasoning + Tool Use\\
+    KG Quality + Dependencies
   };
-  
-  % Data and RL components
-  \node[data, left=of tkg] (synth_data) {Synthetic\\Data/Generation [8]};
-  \node[box, below=of tkg] (buffer) {Experience Buffer\\(s,a,r,s',deps)};
-  \node[rl, below=of buffer] (offline_rl) {Offline RL Update (e.g.,\\CQL [9])};
-  
-  % Offline challenges
-  \node[box, below=of offline_rl, text width=2.5cm, align=center, draw] (challenges) {Offline RL Challenges};
-  \node[box, below=0.3cm of challenges.north, text width=2cm, align=center] (c1) {Non-stationarity};
-  \node[box, below=0.3cm of c1, text width=2cm, align=center] (c2) {Credit Assignment};
-  \node[box, below=0.3cm of c2, text width=2cm, align=center] (c3) {OOD Actions};
-  \node[box, below=0.3cm of c3, text width=2cm, align=center] (c4) {Reward Hacking};
-  
-  % Connections
-  \draw[arrow] (tkg_state) -- (policy);
-  \draw[arrow] (policy) -- (action);
-  \draw[arrow] (action) -- (transition);
-  \draw[arrow] (transition) -- (tkg);
-  \draw[arrow] (transition) -- (reward);
-  \draw[arrow] (tkg) -- node[note, left] {Updates} (buffer);
-  \draw[arrow] (buffer) -- (offline_rl);
-  \draw[arrow] (offline_rl) to[bend right=70] node[note, left] {} (policy);
-  \draw[arrow] (tkg) to[bend left=50] node[note, above] {Provides Next State} (tkg_state);
-  \draw[arrow] (synth_data) -- node[note, above] {Augment} (tkg);
-  
+
+  % Simple explanation of each component with increased spacing moved further out
+  \node[align=center, text width=2.5cm, font=\small] at (0,6) {Makes decisions\\based on context};
+  \node[align=center, text width=2.5cm, font=\small] at (8.5,1.5) {Edits code,\\uses tools};
+  \node[align=center, text width=2.5cm, font=\small] at (8.5,-1.5) {Stores history\\and relationships};
+  \node[align=center, text width=2.5cm, font=\small] at (-8.5,-1.5) {Collects experience\\tuples};
+  \node[align=center, text width=2.5cm, font=\small] at (-8.5,1.5) {Offline learning\\from experiences};
+
   \end{tikzpicture}
-  \caption{Reinforcement Learning Flow in Arc: The system uses a multi-faceted reward function that incentivizes correctness, completeness, reasoning quality, effective tool use, knowledge graph quality, and proper causal dependency tracking. Agents learn from experience traces stored in the Temporal Knowledge Graph, with offline RL updates improving agent policies over time.}
+  }
+  \caption{Reinforcement Learning Flow in Arc: AI agents take actions that update the Temporal Knowledge Graph. These actions are evaluated by a multi-faceted reward function. The experiences are collected and used to improve agent policies through offline reinforcement learning.}
   \label{fig:rl_flow}
 \end{figure}

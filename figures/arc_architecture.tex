@@ -1,52 +1,52 @@
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
+  \resizebox{\textwidth}{!}{
   \begin{tikzpicture}[
-    node distance=1.5cm and 2cm,
-    box/.style={draw, minimum width=3cm, minimum height=1.2cm, align=center, rounded corners=2pt},
+    scale=0.85,
+    box/.style={draw, minimum width=2.8cm, minimum height=1.2cm, align=center, rounded corners=5pt, thick},
     agent/.style={box, fill=orange!20},
     tkg/.style={box, fill=blue!10},
     crdt/.style={box, fill=green!20},
     rl/.style={box, fill=purple!15},
-    note/.style={draw=none, fill=gray!10, font=\footnotesize, align=center, text width=3cm},
-    arrow/.style={->, >=stealth, thick},
-    component/.style={draw, minimum width=2.5cm, minimum height=0.8cm, align=center, font=\footnotesize}
+    arrow/.style={->, >=stealth, thick, shorten >=2pt, shorten <=2pt},
+    dashedarrow/.style={->, >=stealth, thick, dashed, shorten >=2pt, shorten <=2pt}
   ]
 
-  % Main components
-  \node[agent] (agent) {Agent Pool\\(Multi-Agent System)};
-  \node[crdt, below right=of agent] (crdt) {Causal CRDT Layer};
-  \node[tkg, below=2.5cm of crdt] (tkg) {Temporal Knowledge\\Graph (TKG)};
-  \node[rl, below right=of tkg] (rl) {Provenance-Rich\\Experience Traces};
-  \node[component, right=of rl] (state) {State Representation\\(via GNN encoders)};
-  \node[rl, below=of rl] (offline) {Offline RL Policy Update};
+  % Main components in a simple horizontal flow with increased spacing
+  \node[agent] (agent) at (0,0) {AI Agent Pool};
+  \node[crdt] (crdt) at (4.5,0) {Causal CRDT Layer};
+  \node[tkg] (tkg) at (9,0) {Temporal Knowledge\\Graph};
+  \node[rl] (rl) at (13.5,0) {Provenance-Driven\\RL};
 
-  % TKG Components
-  \node[draw, below left=of tkg, text width=3cm, align=center, fill=blue!5] (tkg_components) {TKG Structure};
-  \node[component, below=0.3cm of tkg_components.north] (code) {Code Entities (h,r,t)};
-  \node[component, below=0.3cm of code] (decisions) {Decision Records};
-  \node[component, below=0.3cm of decisions] (reasoning) {Reasoning Steps};
-  \node[component, below=0.3cm of reasoning] (dependencies) {Explicit Causal\\Dependencies};
+  % Draw arrows without labels first
+  \draw[arrow] (agent) -- (crdt);
+  \draw[arrow] (crdt) -- (tkg);
+  \draw[arrow] (tkg) -- (rl);
 
-  % RL Components
-  \node[draw, below right=of offline, text width=3cm, align=center, fill=purple!5] (rl_components) {RL Components};
-  \node[component, below=0.3cm of rl_components.north] (reward) {Multi-faceted Reward\\Function R(s,a,s')};
-  \node[component, below=0.3cm of reward] (buffer) {Experience Buffer\\(s,a,r,s',deps)};
-  \node[component, below=0.3cm of buffer] (q_learning) {Conservative Q-Learning\\[9]};
+  % Add labels as separate nodes with improved spacing
+  % Place 'Actions', 'State Updates', 'Data' above their respective arrows with more horizontal space
+  
+  % 'Actions' above agent->crdt
+  \node[text width=2cm, align=center] at (2.25,1.3) {\textbf{Actions}};
+  % 'State Updates' above crdt->tkg
+  \node[text width=2.2cm, align=center] at (6.75,1.3) {\textbf{State Updates}};
+  % 'Data' above tkg->rl
+  \node[text width=2cm, align=center] at (11.25,1.3) {\textbf{Data}};
 
-  % Connections
-  \draw[arrow] (agent) -- node[above, sloped, font=\footnotesize] {Writes} (crdt);
-  \draw[arrow] (crdt) -- node[left, font=\footnotesize] {Manages concurrent state\\ updates} (tkg);
-  \draw[arrow] (tkg) -- node[above, sloped, font=\footnotesize] {Records actions,\\reasoning, and causal\\dependencies} (rl);
-  \draw[arrow] (rl) -- node[left, font=\footnotesize] {Training signal for offline\\policy learning} (offline);
-  \draw[arrow] (offline) to[bend right=30] node[left, font=\footnotesize] {Policy improvement} (agent);
-  \draw[arrow] (tkg) to[bend left=20] node[above, sloped, font=\footnotesize] {Structured historical\\context} (state);
-  \draw[arrow] (state) to[bend left=20] node[right, font=\footnotesize] {} (offline);
+  % Feedback loop label: 'Policy Updates' centered above the dashed arrow, with extra vertical space for separation
+  \node[text width=3cm, align=center] at (6.75,3.0) {\textbf{Policy Updates}};
 
-  % Notes
-  \node[note, right=0.5cm of crdt] {Enhanced state\\representation};
-  \node[note, left=0.5cm of crdt] {Concurrent operations\\with explicit dependencies};
+  % Feedback loop with a higher arc to avoid overlapping 'Actions'
+  \draw[dashedarrow] (rl) to[bend right=60] (agent);
+
+  % Add a simple explanation of each component below with significantly increased vertical spacing
+  \node[align=center, text width=2.8cm, font=\small] at (0,-2.5) {Multiple AI agents\\working together};
+  \node[align=center, text width=2.8cm, font=\small] at (4.5,-2.5) {Ensures concurrent\\modifications\\don't conflict};
+  \node[align=center, text width=2.8cm, font=\small] at (9,-2.5) {Stores code history,\\decisions, and\\relationships};
+  \node[align=center, text width=2.8cm, font=\small] at (13.5,-2.5) {Rewards agents for\\documenting their\\reasoning};
 
   \end{tikzpicture}
-  \caption{Arc Architecture: The system integrates three key components: (1) A Temporal Knowledge Graph (TKG) that captures the evolving state of code artifacts, decisions, and agent actions; (2) A Causal CRDT layer that enables safe concurrent modifications by enforcing semantic dependencies; and (3) Provenance-driven Reinforcement Learning that rewards agents for generating and consuming causal context within the TKG.}
+  }
+  \caption{Arc Architecture: A simplified view of how Arc's components work together. AI agents make changes through the Causal CRDT layer, which safely updates the Temporal Knowledge Graph. The Provenance-Driven RL component learns from this data and improves agent policies, creating a continuous improvement cycle.}
   \label{fig:arc_architecture}
 \end{figure}

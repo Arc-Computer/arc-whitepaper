@@ -3,3 +3,9 @@ venv/
 setup_and_compile.sh
 compile.sh
 lint_latex.sh
+main.aux
+main.bbl
+main.blg
+main.log
+main.out
+main.toc
