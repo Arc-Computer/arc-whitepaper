@@ -1,0 +1,5 @@
+.venv/
+venv/
+setup_and_compile.sh
+compile.sh
+lint_latex.sh

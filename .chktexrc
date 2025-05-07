@@ -1,0 +1,171 @@
+# ChkTeX configuration file for Arc position paper
+
+# Severity of the warning classes (0-2)
+# 0 = disable, 1 = warning, 2 = error
+CmdLine {
+    -n1 # Command terminated with space
+    -n3 # Iterated spaces
+    -n8 # Wrong dash used
+    -n9 # Wrong dash used
+    -n10 # Multiple spaces
+    -n11 # Multiple spaces
+    -n12 # Interword spacing
+    -n13 # Intersentence spacing
+    -n18 # Use \ldots instead of ...
+    -n24 # Delete double space
+    -n25 # Accents
+    -n26 # Spaces before punctuation
+    -n30 # Multiple periods
+    -n38 # Use \ldots instead of ...
+    -n44 # User-specified phrase
+}
+
+# Words that should be avoided
+WordList {
+    "very"
+    "clearly"
+    "obviously"
+    "basically"
+    "simply"
+    "of course"
+    "just"
+}
+
+# Silent warnings for specific commands
+Silent {
+    \verb
+    \texttt
+    \url
+    \href
+    \includegraphics
+    \input
+    \bibliography
+    \bibliographystyle
+}
+
+# Ignore warnings in environments
+VerbEnvir {
+    verbatim
+    lstlisting
+    minted
+    keypoint
+}
+
+# Allow custom environments
+UserWarnRegex {
+    "\\\\begin\\{[^}]*\\}"
+    "\\\\end\\{[^}]*\\}"
+}
+
+# Allow math commands
+MathEnvir {
+    equation
+    align
+    displaymath
+    eqnarray
+    mathpar
+    $
+    $$
+}
+
+# Ignore warnings in comments
+QuoteStyle {
+    # Disable warnings about quote styles
+    0
+}
+
+# Ignore warnings about italic correction
+ItalCmd {
+    # Disable warnings about italic correction
+    0
+}
+
+# Ignore warnings about bold correction
+BoldCmd {
+    # Disable warnings about bold correction
+    0
+}
+
+# Ignore warnings about centering
+CenterDots {
+    # Disable warnings about centering
+    0
+}
+
+# Ignore warnings about non-breaking space
+NonBreakingSpace {
+    # Disable warnings about non-breaking space
+    0
+}
+
+# Ignore warnings about italic punctuation
+ItalCorr {
+    # Disable warnings about italic punctuation
+    0
+}
+
+# Ignore warnings about space after backslash
+SpaceAfterBackslash {
+    # Disable warnings about space after backslash
+    0
+}
+
+# Ignore warnings about space after command
+SpaceAfterCommand {
+    # Disable warnings about space after command
+    0
+}
+
+# Ignore warnings about space before command
+SpaceBeforeCommand {
+    # Disable warnings about space before command
+    0
+}
+
+# Ignore warnings about space after parenthesis
+SpaceAfterParen {
+    # Disable warnings about space after parenthesis
+    0
+}
+
+# Ignore warnings about space before parenthesis
+SpaceBeforeParen {
+    # Disable warnings about space before parenthesis
+    0
+}
+
+# Ignore warnings about space after bracket
+SpaceAfterBracket {
+    # Disable warnings about space after bracket
+    0
+}
+
+# Ignore warnings about space before bracket
+SpaceBeforeBracket {
+    # Disable warnings about space before bracket
+    0
+}
+
+# Ignore warnings about space after brace
+SpaceAfterBrace {
+    # Disable warnings about space after brace
+    0
+}
+
+# Ignore warnings about space before brace
+SpaceBeforeBrace {
+    # Disable warnings about space before brace
+    0
+}
+
+# Ignore warnings about space after dollar
+SpaceAfterDollar {
+    # Disable warnings about space after dollar
+    0
+}
+
+# Ignore warnings about space before dollar
+SpaceBeforeDollar {
+    # Disable warnings about space before dollar
+    0
+}

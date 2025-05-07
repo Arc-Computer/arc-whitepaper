@@ -12,38 +12,32 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,shapes,fit}
 
-% Typography and layout improvements
-\usepackage{microtype} % Improves typography for better readability
-\usepackage{booktabs} % For better-looking tables
-\usepackage{xcolor} % For consistent color scheme
-\definecolor{arcblue}{RGB}{0, 102, 204} % Define brand color
-\usepackage{titlesec} % For better section formatting
-\usepackage{setspace} % For line spacing control
-\usepackage{tcolorbox} % For highlighted boxes
-\usepackage[left=1.25in,right=1in,top=1in,bottom=1in]{geometry} % Adjusted margins
-\usepackage{qrcode} % For QR code
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\definecolor{arcblue}{RGB}{0, 102, 204}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{tcolorbox}
+\usepackage[left=1.25in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage{qrcode}
 
-% Section formatting with brand color
 \titleformat{\section}{\large\bfseries\color{arcblue}}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries\color{arcblue}}{\thesubsection}{1em}{}
 
-% Key point box definition
 \newtcolorbox{keypoint}{colback=blue!5!white,colframe=arcblue!75!black,title=Key Takeaway}
 
-% Line spacing for better readability
 \setstretch{1.15}
 
-% Page styling
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\fancyhf{} % Clear all header/footer fields
+\fancyhf{}
 \fancyhead[L]{\textit{Arc: Structured, Concurrent, Provenance-Aware AI Memory}}
 \fancyhead[R]{\thepage}
 \fancyfoot[C]{\textit{Position Paper}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
-% Hyperref should be loaded last
 \usepackage[colorlinks=true,linkcolor=arcblue,citecolor=arcblue,urlcolor=cyan]{hyperref}
 
 \newunicodechar{ }{\,}
@@ -54,7 +48,7 @@
   Arc Computer\\
   \texttt{Jarrod@arc.computer}
 }
-\date{\today}
+\date{May 2025}
 \begin{document}
 \maketitle
 
@@ -71,6 +65,8 @@ Arc is an architecture enabling multiple reinforcement learning agents to collab
 
 This approach transforms memory from passive retrieval into an active, shared world model for both human and AI developers. We outline the Arc architecture, introduce the SYNAPSE benchmark for empirical validation, and present a research agenda for this critical challenge in AI-assisted software engineering.
 \end{abstract}
+
+\noindent\textbf{Keywords:} Temporal Knowledge Graphs, Causal CRDTs, Reinforcement Learning, Software Engineering, Multi-Agent Systems, Provenance
 
 
 \section{Introduction}
@@ -103,6 +99,9 @@ Arc transforms every codebase into a continuously-evolving world model—a live,
 \end{center}
 
 \input{arc_roadmap}
+\begin{center}
+\textit{Figure: Arc Development Roadmap - From initial launch to multi-agent coordination}
+\end{center}
 
 \section{Arc at a Glance}
 Arc provides a shared, persistent, and semantically consistent foundation for collaborative AI software development. It integrates three core components, previously introduced, which work in concert to create an active world model of the software project:
@@ -117,7 +116,6 @@ The illustrative example of upgrading OpenSSL across services highlights Arc's p
 \begin{center}
 \textit{Figure: Arc Architecture - Integrating Temporal Knowledge Graphs, Causal CRDTs, and Provenance-Driven RL}
 \end{center}
-
 
 \section{Problem Statement \& Research Gap}
 The challenge is enabling multiple AI agents to collaboratively remember, reason about, and evolve software systems while maintaining architectural integrity and decision provenance.
@@ -182,7 +180,7 @@ We propose an operation-based Causal CRDT to manage concurrent writes while pres
 \begin{itemize}
   \item \textbf{Design:} Each operation has dependency metadata (`deps`) and a vector clock. Merges happen when all dependencies and causal predecessors are satisfied \cite{ref5,ref14,ref15,ref24}, otherwise they are buffered.
       \begin{itemize}
-          \item \textit{Example Operation (Agent B):} \verb|Op:UpdateAPISignature(PaymentAPI)| (ensuring Agent A's foundational refactor is committed before the API depending on it is changed). Merges (applying operations to the shared state) occur only when all vector clock predecessors \textit{and} explicit TKG-derived dependencies are satisfied \cite{ref9, ref20, ref21, ref22}. Operations with unmet dependencies are buffered (See Figure \ref{fig:causal_dependency}).
+          \item \textit{Example Operation (Agent B):} \verb|Op:UpdateAPISignature(PaymentAPI)| (ensuring Agent A's foundational refactor is committed before the API depending on it is changed). Merges (applying operations to the shared state) occur only when all vector clock predecessors \textit{and} explicit TKG-derived dependencies are satisfied \cite{ref9, ref20, ref21, ref22}. Operations with unmet dependencies are buffered (See Figure \ref{fig:causal_dependency} above).
       \end{itemize}
 
   \item \textbf{Differentiation:} Its novelty is in enforcing deterministic, application-specific causal invariants critical for software evolution (e.g., "a service cannot deploy if dependent libraries fail tests," "an API change requires updating all callers"). Unlike structural CRDTs or probabilistic approaches, Arc leverages the live TKG state during the merge protocol to define and check semantic invariants via metadata, ensuring correctness beyond eventual consistency.
@@ -316,14 +314,20 @@ AI-generated code presents both opportunity and risk: accelerated development al
 
 We anticipate significant impact: accelerating large-scale refactorings, enabling self-healing systems, and reducing integration conflicts. The SYNAPSE benchmark provides a concrete validation path, but realizing this vision requires collaborative effort. We invite the research community to engage with these ideas and help build the future of structured, concurrent, and provenance-aware collective AI memory for software engineering—moving beyond transient context toward a new generation of AI-assisted development.
 
+\section*{Acknowledgments}
+We thank the research community for valuable discussions that have shaped this position paper. We welcome collaboration on the open challenges outlined in our research agenda. For inquiries about Arc or potential collaborations, please contact \texttt{Jarrod@arc.computer}.
+
 \bibliographystyle{abbrvnat}
 \bibliography{references}
 
 \clearpage
 \input{glossary}
 
-\vspace{1cm}
+\vspace{0.5cm}
 \begin{center}
+\rule{0.5\textwidth}{0.5pt}
+\vspace{0.5cm}
+
 \qrcode[height=1.5in]{https://arc.computer}
 \\ \vspace{0.3cm}
 \textit{Learn more about Arc at \href{https://arc.computer}{arc.computer}}
