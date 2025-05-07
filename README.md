@@ -1,5 +1,7 @@
 # Arc: Structured, Concurrent, and Provenance-Aware Collective AI Memory for Software Engineering
 
+**[📄 Read the full whitepaper (PDF)](paper/whitepaper.pdf)**
+
 This repository contains a position paper describing Arc, a proposed architecture enabling multiple reinforcement learning (RL) agents to collaboratively manage long-lived codebases, transforming them into continuously-evolving world models.
 
 ## Abstract
